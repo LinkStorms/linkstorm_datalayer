@@ -1,6 +1,7 @@
-from models import  User
-
 from email_validator import validate_email, EmailNotValidError
+import validators
+
+from models import  User
 
 
 def password_validation(password):
@@ -51,3 +52,18 @@ def user_id_validation(user_id, check_if_exists=True):
         user = User.query.get(user_id)
         if not user:
             raise ValueError("User does not exist.")
+
+
+def url_validation(url, ignore_protocol=False):
+    """ Raises an exception if url is not valid.
+    """
+    if not url:
+        raise ValueError("Url is required.")
+
+    if ignore_protocol:
+        url_with_protocol = "http://" + url
+        if not validators.url(url_with_protocol) and not validators.url(url):
+            raise ValueError("Url is not valid.")
+    else:
+        if not validators.url(url):
+            raise ValueError("Url is not valid.")
