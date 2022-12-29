@@ -153,3 +153,35 @@ def create_short_url_endpoint():
         "data": {"short_url_id": short_url_obj.id},
         "errors": []
     }, 200
+
+
+@app.route("/short_url_list", methods=["GET"])
+@swag_from("flasgger_docs/get_short_urls_for_user_endpoint.yml")
+def get_short_urls_for_user_endpoint():
+    user_id = request.args.get("user_id", None)
+
+    try:
+        user_id_validation(user_id)
+    except ValueError as e:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": [str(e)]
+        }, 400
+
+    short_url_list = ShortUrl.query.filter_by(user_id=user_id).all()
+    data = {
+        "code": 200,
+        "data": {
+            "short_url_list":
+                [
+                    {
+                        "short_url": url.short_url,
+                        "long_url": url.long_url,
+                        "note": url.note
+                    } for url in short_url_list
+                ]
+        },
+        "errors": []
+    }, 200
+    return data
