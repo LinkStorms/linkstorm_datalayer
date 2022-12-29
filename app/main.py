@@ -41,9 +41,11 @@ def handle_exception(e):
 @app.route("/create_user", methods=["POST"])
 @swag_from("flasgger_docs/create_user_endpoint.yml")
 def create_user_endpoint():
-    username = request.json.get("username")
-    email = request.json.get("email")
-    password = request.json.get("password")
+    username = request.json.get("username", "")
+    email = request.json.get("email", "")
+    password = request.json.get("password", "")
+
+    # TODO: should we check if json only contains these three keys?
 
     validation_errors = []
     try:
