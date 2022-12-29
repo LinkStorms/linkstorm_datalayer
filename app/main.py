@@ -73,7 +73,7 @@ def create_user_endpoint():
             "code": 400,
             "data": {},
             "errors": validation_errors
-        }
+        }, 400
 
     # hash password with salt
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
@@ -86,19 +86,19 @@ def create_user_endpoint():
             "code": 409,
             "data": {},
             "errors": ["User already exists."]
-        }
+        }, 409
     except exc.SQLAlchemyError:
         return {
             "code": 500,
             "data": {},
             "errors": ["Something went wrong."]
-        }
+        }, 500
 
     return {
         "code": 200,
         "data": {"user_id": user.id},
         "errors": []
-    }
+    }, 200
 
 
 @app.route("/create_short_url", methods=["POST"])
@@ -183,5 +183,5 @@ def get_short_urls_for_user_endpoint():
                 ]
         },
         "errors": []
-    }, 200
-    return data
+    }
+    return data, 200
