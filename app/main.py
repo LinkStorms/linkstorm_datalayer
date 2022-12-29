@@ -21,6 +21,22 @@ with app.app_context():
     db.create_all()
 
 
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "code": e.code,
+        # "name": e.name,
+        "data": {},
+        "errors": [e.description],
+    })
+    response.content_type = "application/json"
+    return response
+
+
 @app.route("/create_user", methods=["POST"])
 @swag_from("flasgger_docs/create_user_endpoint.yml")
 def create_user_endpoint():
