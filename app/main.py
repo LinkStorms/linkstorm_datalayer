@@ -2,6 +2,11 @@ from flask import Flask, request
 from sqlalchemy import exc
 
 from models import db, User
+from validation import (
+    password_validation,
+    username_validation,
+    email_validation
+)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
@@ -16,6 +21,27 @@ def create_user_endpoint():
     username = request.json.get("username")
     email = request.json.get("email")
     password = request.json.get("password")
+
+    validation_errors = []
+    try:
+        username_validation(username)
+    except ValueError as e:
+        validation_errors.append(str(e))
+    try:
+        email_validation(email)
+    except ValueError as e:
+        validation_errors.append(str(e))
+    try:
+        password_validation(password)
+    except ValueError as e:
+        validation_errors.append(str(e))
+    
+    if validation_errors:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": validation_errors
+        }
 
     user = User(username=username, email=email, password=password)
     try:
