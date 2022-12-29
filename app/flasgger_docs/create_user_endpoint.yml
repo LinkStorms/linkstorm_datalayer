@@ -1,26 +1,31 @@
 Creating a new user and returning the user id if the creation was successful.
 ---
 parameters:
-  - name: username
-    type: string
-    description: Must be at least 3 characters long. It can only contain
-                 letters or digits. It must at least contain one letter.
-    in: body
-    example: "username"
-    required: true
-  - name: email
-    type: string
-    description: Must be a valid email address.
-    in: body
-    example: "email@domain.com"
-    required: true
-  - name: password
-    type: string
-    description: Must be at least 8 characters long. Contain at least one
-                 letter and one digit.
-    in: body
-    example: "password1234"
-    required: true
+  - in: body
+    name: user
+    description: New user's detail to be created.
+    schema:
+        type: object
+        properties:
+            username:
+                type: string
+                description: Must be at least 3 characters long. It can only contain
+                            letters or digits. It must at least contain one letter.
+                example: "username"
+                required: true
+            email:
+                type: string
+                description: Must be a valid email address.
+                in: body
+                example: "email@domain.com"
+                required: true
+            password:
+                type: string
+                description: Must be at least 8 characters long. Contain at least one
+                            letter and one digit.
+                in: body
+                example: "password1234"
+                required: true
 responses:
     200:
         description: Successful operation. The id of the created user will be returned.
