@@ -1,4 +1,5 @@
-from flask import Flask, request
+from flask import Flask, request, json
+from werkzeug.exceptions import HTTPException
 from sqlalchemy import exc
 from flasgger import Swagger, swag_from
 import bcrypt
