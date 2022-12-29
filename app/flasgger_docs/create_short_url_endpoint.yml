@@ -1,0 +1,103 @@
+Creating a short url and returning the short url id if the creation was successful.
+---
+parameters:
+  - name: short_url
+    type: string
+    description: A valid short url.
+    in: body
+    example: "https://link.com/short"
+    required: true
+  - name: long_url
+    type: string
+    description: A valid url.
+    in: body
+    example: "https://link.com/looooooooooooooooong"
+    required: true
+  - name: user_id
+    type: integer
+    description: The user_id of the User who is the owner of the link.
+    in: body
+    example: 99
+    required: true
+  - name: note
+    type: string
+    description: An optional note to be saved with the short url.
+    in: body
+    example: Link to buy discounted shoes.
+    required: false
+responses:
+    200:
+        description: Successful operation. The id of the created short url will be returned.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 200
+                data:
+                    type: object
+                    properties:
+                        short_url_id:
+                            type: integer
+                            description: The id of created short url
+                            example: 99
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: []
+    400:
+        description: Bad request. Validation on one or more required parameters failed.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 400
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: [
+                        "Short Url is not valid.",
+                        "User does not exist."
+                    ]
+    409:
+        description: This short url already exists.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 409
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["Short Url already exists."]
+    5XX:
+        description: There was an unexpected error processing your request.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 5XX
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["Something went wrong."]
