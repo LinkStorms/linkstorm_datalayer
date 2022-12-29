@@ -1,5 +1,6 @@
 from flask import Flask, request
 from sqlalchemy import exc
+import bcrypt
 
 from models import db, User
 from validation import (
@@ -43,7 +44,9 @@ def create_user_endpoint():
             "errors": validation_errors
         }
 
-    user = User(username=username, email=email, password=password)
+    # hash password with salt
+    hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    user = User(username=username, email=email, password=hashed_password)
     try:
         db.session.add(user)
         db.session.commit()
