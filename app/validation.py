@@ -54,7 +54,7 @@ def user_id_validation(user_id, check_if_exists=True):
             raise ValueError("User does not exist.")
 
 
-def url_validation(url, ignore_protocol=False):
+def url_validation(url, url_name="Url", ignore_protocol=False):
     """ Raises an exception if url is not valid.
     """
     if not url:
@@ -63,7 +63,7 @@ def url_validation(url, ignore_protocol=False):
     if ignore_protocol:
         url_with_protocol = "http://" + url
         if not validators.url(url_with_protocol) and not validators.url(url):
-            raise ValueError("Url is not valid.")
+            raise ValueError(f"{url_name} is not valid.")
     else:
         if not validators.url(url):
-            raise ValueError("Url is not valid.")
+            raise ValueError(f"{url_name} is not valid.")
