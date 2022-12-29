@@ -4,11 +4,17 @@ from sqlalchemy import exc
 from flasgger import Swagger, swag_from
 import bcrypt
 
-from models import db, User
+from models import (
+    db,
+    User,
+    ShortUrl
+)
 from validation import (
     password_validation,
     username_validation,
-    email_validation
+    email_validation,
+    user_id_validation,
+    url_validation
 )
 
 
@@ -93,3 +99,57 @@ def create_user_endpoint():
         "data": {"user_id": user.id},
         "errors": []
     }
+
+
+@app.route("/create_short_url", methods=["POST"])
+@swag_from("flasgger_docs/create_short_url_endpoint.yml")
+def create_short_url_endpoint():
+    short_url = request.json.get("short_url", "")
+    long_url = request.json.get("long_url", "")
+    note = request.json.get("note", "")
+    user_id = request.json.get("user_id", None)
+
+    short_url_obj = ShortUrl(short_url=short_url, long_url=long_url, note=note, user_id=user_id)
+
+    errors = []
+    try:
+        user_id_validation(user_id)
+    except ValueError as e:
+        errors.append(str(e))
+    try:
+        url_validation(long_url, url_name="long_url")
+    except ValueError as e:
+        errors.append(str(e))
+    try:
+        url_validation(short_url, url_name="short_url")
+    except ValueError as e:
+        errors.append(str(e))
+    
+    if errors:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": errors
+        }, 400
+
+    try:
+        db.session.add(short_url_obj)
+        db.session.commit()
+    except exc.IntegrityError:
+        return {
+            "code": 409,
+            "data": {},
+            "errors": ["Short Url already exists."]
+        }, 409
+    except exc.SQLAlchemyError:
+        return {
+            "code": 500,
+            "data": {},
+            "errors": ["Something went wrong."]
+        }, 500
+
+    return {
+        "code": 200,
+        "data": {"short_url_id": short_url_obj.id},
+        "errors": []
+    }, 200
