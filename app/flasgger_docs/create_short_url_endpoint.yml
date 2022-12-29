@@ -1,30 +1,36 @@
 Creating a short url and returning the short url id if the creation was successful.
 ---
 parameters:
-  - name: short_url
-    type: string
-    description: A valid short url.
-    in: body
-    example: "https://link.com/short"
-    required: true
-  - name: long_url
-    type: string
-    description: A valid url.
-    in: body
-    example: "https://link.com/looooooooooooooooong"
-    required: true
-  - name: user_id
-    type: integer
-    description: The user_id of the User who is the owner of the link.
-    in: body
-    example: 99
-    required: true
-  - name: note
-    type: string
-    description: An optional note to be saved with the short url.
-    in: body
-    example: Link to buy discounted shoes.
-    required: false
+  - in: body
+    name: short_url
+    description: New short url to be created.
+    schema:
+        type: object
+        properties:
+            short_url:
+                type: string
+                description: A valid short url.
+                in: body
+                example: "https://link.com/short"
+                required: true
+            long_url:
+                type: string
+                description: A valid url.
+                in: body
+                example: "https://link.com/looooooooooooooooong"
+                required: true
+            user_id:
+                type: integer
+                description: The user_id of the User who is the owner of the link.
+                in: body
+                example: 1
+                required: true
+            note:
+                type: string
+                description: An optional note to be saved with the short url.
+                in: body
+                example: Link to buy discounted shoes.
+                required: false
 responses:
     200:
         description: Successful operation. The id of the created short url will be returned.
