@@ -4,8 +4,7 @@ from email_validator import validate_email, EmailNotValidError
 
 
 def password_validation(password):
-    """ Returns true if password is at least 8 characters long, contains at
-    least one number and one letter.
+    """ Raises an exception if password is not valid.
     """
     if len(password) < 8:
         raise ValueError("Password must be at least 8 characters long.")
@@ -16,8 +15,7 @@ def password_validation(password):
 
 
 def username_validation(username):
-    """ Returns true if username is at least 3 characters long and contains
-    only letters and numbers.
+    """ Raises an exception if username is not valid.
     """
     if len(username) < 3:
         raise ValueError("Username must be at least 3 characters long.")
@@ -28,7 +26,7 @@ def username_validation(username):
 
 
 def email_validation(email):
-    """ Returns true if email is valid.
+    """ Raises an exception if email is not valid.
     """
     try:
         # check_deliverability is set to false to be able to create users with
@@ -39,9 +37,8 @@ def email_validation(email):
 
 
 def user_id_validation(user_id, check_if_exists=True):
-    """ Returns true if user_id is a valid user id.
+    """  Raises an exception if user_id is not valid.
     """
-
     if not user_id:
         raise ValueError("User id is required.")
 
