@@ -1,3 +1,5 @@
+from models import  User
+
 from email_validator import validate_email, EmailNotValidError
 
 
@@ -34,3 +36,21 @@ def email_validation(email):
         validate_email(email, check_deliverability=False)
     except EmailNotValidError as e:
         raise ValueError(str(e))
+
+
+def user_id_validation(user_id, check_if_exists=True):
+    """ Returns true if user_id is a valid user id.
+    """
+
+    if not user_id:
+        raise ValueError("User id is required.")
+
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        raise ValueError("User id must be an integer.")
+
+    if check_if_exists:
+        user = User.query.get(user_id)
+        if not user:
+            raise ValueError("User does not exist.")
