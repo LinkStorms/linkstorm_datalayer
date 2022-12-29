@@ -1,0 +1,99 @@
+Creating a new user and returning the user id if the creation was successful.
+---
+parameters:
+  - name: username
+    type: string
+    description: Must be at least 3 characters long. It can only contain
+                 letters or digits. It must at least contain one letter.
+    in: body
+    example: "username"
+    required: true
+  - name: email
+    type: string
+    description: Must be a valid email address.
+    in: body
+    example: "email@domain.com"
+    required: true
+  - name: password
+    type: string
+    description: Must be at least 8 characters long. Contain at least one
+                 letter and one digit.
+    in: body
+    example: "password1234"
+    required: true
+responses:
+    200:
+        description: Successful operation. The id of the created user will be returned.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 200
+                data:
+                    type: object
+                    properties:
+                        user_id:
+                            type: integer
+                            description: The id of created user
+                            example: 99
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: []
+    400:
+        description: Bad request. Validation on one or more required parameters failed.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 400
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: [
+                        "Password must be at least 8 characters long.",
+                        Username must contain at least one letter.
+                    ]
+    409:
+        description: A user with the same username or email address already exists.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 409
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["User already exists."]
+    5XX:
+        description: There was an unexpected error processing your request.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 5XX
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["Something went wrong."]

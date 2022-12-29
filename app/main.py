@@ -1,5 +1,6 @@
 from flask import Flask, request
 from sqlalchemy import exc
+from flasgger import Swagger, swag_from
 import bcrypt
 
 from models import db, User
@@ -9,15 +10,19 @@ from validation import (
     email_validation
 )
 
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
+
+Swagger(app)
 
 with app.app_context():
     db.create_all()
 
 
 @app.route("/create_user", methods=["POST"])
+@swag_from("flasgger_docs/create_user_endpoint.yml")
 def create_user_endpoint():
     username = request.json.get("username")
     email = request.json.get("email")
