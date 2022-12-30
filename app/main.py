@@ -7,14 +7,17 @@ import bcrypt
 from models import (
     db,
     User,
-    ShortUrl
+    ShortUrl,
+    Token
 )
 from validation import (
     password_validation,
     username_validation,
     email_validation,
     user_id_validation,
-    url_validation
+    url_validation,
+    token_validation,
+    token_name_validation
 )
 
 
@@ -190,3 +193,56 @@ def get_short_urls_for_user_endpoint():
         "errors": []
     }
     return data, 200
+
+
+@app.route("/create_token", methods=["POST"])
+@swag_from("flasgger_docs/create_token_endpoint.yml")
+def create_token_endpoint():
+    token = request.json.get("token", None)
+    token_name = request.json.get("token_name", None)
+    user_id = request.json.get("user_id", None)
+
+    errors = []
+    try:
+        user_id_validation(user_id)
+    except ValueError as e:
+        errors.append(str(e))
+    try:
+        token_validation(token)
+    except ValueError as e:
+        errors.append(str(e))
+    try:
+        token_name_validation(token_name)
+    except ValueError as e:
+        errors.append(str(e))
+
+    # if there are any validation errors, return them
+    if errors:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": errors
+        }, 400
+    
+    token_obj = Token(token=token, name=token_name, user_id=user_id)
+    try:
+        db.session.add(token_obj)
+        db.session.commit()
+    except exc.IntegrityError:
+        return {
+            "code": 409,
+            "data": {},
+            "errors": ["Token already exists."]
+        }, 409
+    except exc.SQLAlchemyError:
+        return {
+            "code": 500,
+            "data": {},
+            "errors": ["Something went wrong."]
+        }, 500
+    
+    return {
+        "code": 200,
+        "data": {"token_id": token_obj.id},
+        "errors": []
+    }, 200
