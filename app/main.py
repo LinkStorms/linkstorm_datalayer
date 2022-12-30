@@ -323,7 +323,7 @@ def get_token_by_id_endpoint():
 
 
 @app.route("/delete_token", methods=["DELETE"])
-# @swag_from("flasgger_docs/delete_token_endpoint.yml")
+@swag_from("flasgger_docs/delete_token_endpoint.yml")
 def delete_token_endpoint():
     token_id = request.args.get("token_id", None)
 
