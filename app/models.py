@@ -21,4 +21,14 @@ class ShortUrl(db.Model):
     note = db.Column(db.String, nullable=True)
 
     def __repr__(self):
-        return f"<ShortUrl {self.id}: {self.short_url} -> {self.long_url}>"
+        return f"<ShortUrl {self.id} for {self.user_id}: {self.short_url} -> {self.long_url}>"
+
+
+class Token(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    token = db.Column(db.String, nullable=False, unique=True)
+
+    def __repr__(self):
+        return f"<Token {self.id} for {self.user_id}: {self.name}>"
