@@ -107,3 +107,15 @@ def token_name_validation(token_name, token_name_length_range=TOKEN_NAME_LENGTH_
         raise ValueError(f"Token name must be at least {min_length} characters long.")
     if len(token_name) > max_length:
         raise ValueError(f"Token name must be less than {max_length} characters long.")
+
+
+def token_id_validation(token_id):
+    """ Raises an exception if token_id is not valid.
+    """
+    if not token_id:
+        raise ValueError("Token id is required.")
+
+    try:
+        token_id = int(token_id)
+    except ValueError:
+        raise ValueError("Token id must be an integer.")
