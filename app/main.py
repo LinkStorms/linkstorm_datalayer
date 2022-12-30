@@ -320,3 +320,43 @@ def get_token_by_id_endpoint():
         "errors": []
     }
     return data, 200
+
+
+@app.route("/delete_token", methods=["DELETE"])
+# @swag_from("flasgger_docs/delete_token_endpoint.yml")
+def delete_token_endpoint():
+    token_id = request.args.get("token_id", None)
+
+    # if there are any validation errors, return them
+    try:
+        token_id_validation(token_id)
+    except ValueError as e:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": [str(e)]
+        }, 400
+
+    token = Token.query.filter_by(id=token_id).first()
+    if not token:
+        return {
+            "code": 404,
+            "data": {},
+            "errors": ["Token not found."]
+        }, 404
+
+    try:
+        db.session.delete(token)
+        db.session.commit()
+    except exc.SQLAlchemyError:
+        return {
+            "code": 500,
+            "data": {},
+            "errors": ["Something went wrong."]
+        }, 500
+
+    return {
+        "code": 200,
+        "data": {},
+        "errors": []
+    }, 200
