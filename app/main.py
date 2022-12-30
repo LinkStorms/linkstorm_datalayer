@@ -4,6 +4,7 @@ from sqlalchemy import exc
 from flasgger import Swagger, swag_from
 import bcrypt
 
+from settings import SHOW_TOKEN_IN_TOKEN_LIST
 from models import (
     db,
     User,
@@ -17,7 +18,8 @@ from validation import (
     user_id_validation,
     url_validation,
     token_validation,
-    token_name_validation
+    token_name_validation,
+    token_id_validation
 )
 
 
@@ -30,7 +32,7 @@ Swagger(app)
 
 # Dropping all of the tables and creating them again.
 with app.app_context():
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
 
 
@@ -246,3 +248,37 @@ def create_token_endpoint():
         "data": {"token_id": token_obj.id},
         "errors": []
     }, 200
+
+
+@app.route("/token_list", methods=["GET"])
+@swag_from("flasgger_docs/get_tokens_for_user_endpoint.yml")
+def get_tokens_for_user_endpoint():
+    user_id = request.args.get("user_id", None)
+
+    # if there are any validation errors, return them
+    try:
+        user_id_validation(user_id)
+    except ValueError as e:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": [str(e)]
+        }, 400
+
+    token_list = Token.query.filter_by(user_id=user_id).all()
+    data = {
+        "code": 200,
+        "data": {
+            "token_list":
+                [
+                    {
+                        "token_id": token.id,
+                        "name": token.name,
+                        "token": token.token if SHOW_TOKEN_IN_TOKEN_LIST
+                            else "secret"
+                    } for token in token_list
+                ]
+        },
+        "errors": []
+    }
+    return data, 200
