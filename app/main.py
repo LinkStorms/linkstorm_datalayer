@@ -186,6 +186,7 @@ def get_short_urls_for_user_endpoint():
             "short_url_list":
                 [
                     {
+                        "short_url_id": url.id,
                         "short_url": url.short_url,
                         "long_url": url.long_url,
                         "note": url.note
