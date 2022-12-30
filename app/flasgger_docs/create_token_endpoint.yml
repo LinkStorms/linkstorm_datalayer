@@ -1,0 +1,104 @@
+Creating a new token for a user and returning the token id if the creation was
+successful.
+---
+parameters:
+  - in: body
+    name: token
+    description: A new token for an specific service provider to be saved for
+                 a user.
+    schema:
+        type: object
+        properties:
+            token:
+                type: string
+                description: Token
+                example: "p2ZbmRosn7Klkbr5ir7c1deQmztlViOipj2q81GB2XcUv9suOG8yp3OspA1b"
+                required: true
+            name:
+                type: string
+                description: Name of the token
+                in: body
+                example: "bitly"
+                required: true
+            user_id:
+                type: integer
+                description: The id of the user who owns the token.
+                in: body
+                example: "1"
+                required: true
+responses:
+    200:
+        description: Successful operation. The id of the created token will be returned.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 200
+                data:
+                    type: object
+                    properties:
+                        token_id:
+                            type: integer
+                            description: The id of created token
+                            example: 99
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: []
+    400:
+        description: Bad request. Validation on one or more required parameters failed.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 400
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: [
+                        "Token length should be less than XXX.",
+                        "Token name is required."
+                    ]
+    409:
+        description: Token already exists.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 409
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["Token already exists."]
+    5XX:
+        description: There was an unexpected error processing your request.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 5XX
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["Something went wrong."]
