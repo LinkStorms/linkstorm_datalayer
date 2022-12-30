@@ -4,6 +4,9 @@ import validators
 from models import  User
 
 
+MAX_TOKEN_LENGTH = 512
+
+
 def password_validation(password):
     """ Raises an exception if password is not valid.
     """
@@ -67,3 +70,13 @@ def url_validation(url, url_name="Url", ignore_protocol=False):
     else:
         if not validators.url(url):
             raise ValueError(f"{url_name} is not valid.")
+
+
+def token_validation(token):
+    """ Raises an exception if token is not valid.
+    """
+    if not token:
+        raise ValueError("Token is required.")
+
+    if len(token) > MAX_TOKEN_LENGTH:
+        raise ValueError(f"Token length should be less than {MAX_TOKEN_LENGTH}.")
