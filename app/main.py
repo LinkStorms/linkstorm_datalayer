@@ -24,6 +24,8 @@ db.init_app(app)
 
 Swagger(app)
 
+
+# Dropping all of the tables and creating them again.
 with app.app_context():
     db.drop_all()
     db.create_all()
@@ -68,6 +70,7 @@ def create_user_endpoint():
     except ValueError as e:
         validation_errors.append(str(e))
     
+    # if there are any validation errors, return them
     if validation_errors:
         return {
             "code": 400,
@@ -125,6 +128,7 @@ def create_short_url_endpoint():
     except ValueError as e:
         errors.append(str(e))
     
+    # if there are any validation errors, return them
     if errors:
         return {
             "code": 400,
@@ -160,6 +164,7 @@ def create_short_url_endpoint():
 def get_short_urls_for_user_endpoint():
     user_id = request.args.get("user_id", None)
 
+    # if there are any validation errors, return them
     try:
         user_id_validation(user_id)
     except ValueError as e:
