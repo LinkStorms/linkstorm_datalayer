@@ -1,29 +1,37 @@
 from email_validator import validate_email, EmailNotValidError
 import validators
 
+from settings import (
+    PASSWORD_LENGTH_RANGE,
+    USERNAME_LENGTH_RANGE,
+    TOKEN_LENGTH_RANGE,
+    TOKEN_NAME_LENGTH_RANGE
+)
 from models import  User
 
 
-MAX_TOKEN_LENGTH = 512
-MAX_TOKEN_NAME = 256
-
-
-def password_validation(password):
+def password_validation(password, password_length_range=PASSWORD_LENGTH_RANGE):
     """ Raises an exception if password is not valid.
     """
-    if len(password) < 8:
-        raise ValueError("Password must be at least 8 characters long.")
+    min_length, max_length = password_length_range
+    if len(password) < min_length:
+        raise ValueError(f"Password must be at least {min_length} characters long.")
+    if len(password) > max_length:
+        raise ValueError(f"Password must be less than {max_length} characters long.")
     if not any(char.isdigit() for char in password):
         raise ValueError ("Password must contain at least one digit.")
     if not any(char.isalpha() for char in password):
         return ValueError ("Password must contain at least one letter.")
 
 
-def username_validation(username):
+def username_validation(username, username_length_range=USERNAME_LENGTH_RANGE):
     """ Raises an exception if username is not valid.
     """
-    if len(username) < 3:
-        raise ValueError("Username must be at least 3 characters long.")
+    min_length, max_length = username_length_range
+    if len(username) < min_length:
+        raise ValueError(f"Username must be at least {min_length} characters long.")
+    if len(username) > max_length:
+        raise ValueError(f"Username must be less than {max_length} characters long.")
     if not all(char.isalnum() for char in username):
         raise ValueError("Username must can only be letters and numbers.")
     if not any(char.isalpha() for char in username):
@@ -73,21 +81,29 @@ def url_validation(url, url_name="Url", ignore_protocol=False):
             raise ValueError(f"{url_name} is not valid.")
 
 
-def token_validation(token):
+def token_validation(token, token_length_range=TOKEN_LENGTH_RANGE):
     """ Raises an exception if token is not valid.
     """
+    min_length, max_length = token_length_range
+
     if not token:
         raise ValueError("Token is required.")
 
-    if len(token) > MAX_TOKEN_LENGTH:
-        raise ValueError(f"Token length should be less than {MAX_TOKEN_LENGTH}.")
+    if len(token) < min_length:
+        raise ValueError(f"Token must be at least {min_length} characters long.")
+    if len(token) > max_length:
+        raise ValueError(f"Token must be less than {max_length} characters long.")
 
 
-def token_name_validation(token_name):
+def token_name_validation(token_name, token_name_length_range=TOKEN_NAME_LENGTH_RANGE):
     """ Raises an exception if token_name is not valid.
     """
+    min_length, max_length = token_name_length_range
+
     if not token_name:
         raise ValueError("Token name is required.")
 
-    if len(token_name) > MAX_TOKEN_NAME:
-        raise ValueError(f"Token name length should be less than {MAX_TOKEN_NAME}.")
+    if len(token_name) < min_length:
+        raise ValueError(f"Token name must be at least {min_length} characters long.")
+    if len(token_name) > max_length:
+        raise ValueError(f"Token name must be less than {max_length} characters long.")
