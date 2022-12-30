@@ -119,3 +119,15 @@ def token_id_validation(token_id):
         token_id = int(token_id)
     except ValueError:
         raise ValueError("Token id must be an integer.")
+
+
+def short_url_id_validation(short_url_id):
+    """ Raises an exception if short_url_id is not valid.
+    """
+    if not short_url_id:
+        raise ValueError("Short url id is required.")
+
+    try:
+        short_url_id = int(short_url_id)
+    except ValueError:
+        raise ValueError("Short url id must be an integer.")
