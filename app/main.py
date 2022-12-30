@@ -282,3 +282,40 @@ def get_tokens_for_user_endpoint():
         "errors": []
     }
     return data, 200
+
+
+@app.route("/token", methods=["GET"])
+@swag_from("flasgger_docs/get_token_by_id_endpoint.yml")
+def get_token_by_id_endpoint():
+    token_id = request.args.get("token_id", None)
+
+    # if there are any validation errors, return them
+    try:
+        token_id_validation(token_id)
+    except ValueError as e:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": [str(e)]
+        }, 400
+
+    token = Token.query.filter_by(id=token_id).first()
+    if not token:
+        return {
+            "code": 404,
+            "data": {},
+            "errors": ["Token not found."]
+        }, 404
+
+    data = {
+        "code": 200,
+        "data": {
+            "token": {
+                "token_id": token.id,
+                "name": token.name,
+                "token": token.token
+            }
+        },
+        "errors": []
+    }
+    return data, 200
