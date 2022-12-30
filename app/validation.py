@@ -5,6 +5,7 @@ from models import  User
 
 
 MAX_TOKEN_LENGTH = 512
+MAX_TOKEN_NAME = 256
 
 
 def password_validation(password):
@@ -80,3 +81,13 @@ def token_validation(token):
 
     if len(token) > MAX_TOKEN_LENGTH:
         raise ValueError(f"Token length should be less than {MAX_TOKEN_LENGTH}.")
+
+
+def token_name_validation(token_name):
+    """ Raises an exception if token_name is not valid.
+    """
+    if not token_name:
+        raise ValueError("Token name is required.")
+
+    if len(token_name) > MAX_TOKEN_NAME:
+        raise ValueError(f"Token name length should be less than {MAX_TOKEN_NAME}.")
