@@ -1,0 +1,88 @@
+Delete the short url specified by the short_url_id.
+---
+parameters:
+  - name: short_url_id
+    type: integer
+    description: id of the short url.
+    minimum: 1
+    in: query
+    required: true
+  - name: user_id
+    type: integer
+    description: id of the user.
+    minimum: 1
+    in: query
+    required: true
+responses:
+    200:
+        description: The requested short url deleted.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 200
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: []
+    400:
+        description: Bad request. Validation on one or more required parameters failed.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 400
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: [
+                        "User does not exist."
+                    ]
+    404:
+        description: The requested short url does not exist.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 404
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: [
+                      "Short url not found."
+                    ]
+    5XX:
+        description: There was an unexpected error processing your request.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 5XX
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["Something went wrong."]
