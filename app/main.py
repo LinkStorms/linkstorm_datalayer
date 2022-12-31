@@ -19,7 +19,8 @@ from validation import (
     url_validation,
     token_validation,
     token_name_validation,
-    token_id_validation
+    token_id_validation,
+    short_url_id_validation
 )
 
 
@@ -160,6 +161,55 @@ def create_short_url_endpoint():
     return {
         "code": 200,
         "data": {"short_url_id": short_url_obj.id},
+        "errors": []
+    }, 200
+
+
+@app.route("/delete_short_url", methods=["DELETE"])
+# @swag_from("flasgger_docs/delete_short_url_endpoint.yml")
+def delete_short_url_endpoint():
+    short_url_id = request.args.get("short_url_id", None)
+    user_id = request.args.get("user_id", None)
+
+    errors = []
+    try:
+        user_id_validation(user_id)
+    except ValueError as e:
+        errors.append(str(e))
+    try:
+        short_url_id_validation(short_url_id)
+    except ValueError as e:
+        errors.append(str(e))
+
+    # if there are any validation errors, return them
+    if errors:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": errors
+        }, 400
+
+    short_url = ShortUrl.query.filter_by(id=short_url_id, user_id=user_id).first()
+    if not short_url:
+        return {
+            "code": 404,
+            "data": {},
+            "errors": ["Short url not found."]
+        }, 404
+
+    try:
+        db.session.delete(short_url)
+        db.session.commit()
+    except exc.SQLAlchemyError:
+        return {
+            "code": 500,
+            "data": {},
+            "errors": ["Something went wrong."]
+        }, 500
+
+    return {
+        "code": 200,
+        "data": {},
         "errors": []
     }, 200
 
