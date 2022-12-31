@@ -166,7 +166,7 @@ def create_short_url_endpoint():
 
 
 @app.route("/delete_short_url", methods=["DELETE"])
-# @swag_from("flasgger_docs/delete_short_url_endpoint.yml")
+@swag_from("flasgger_docs/delete_short_url_endpoint.yml")
 def delete_short_url_endpoint():
     short_url_id = request.args.get("short_url_id", None)
     user_id = request.args.get("user_id", None)
