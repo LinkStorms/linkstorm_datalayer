@@ -1,0 +1,104 @@
+Returning the user if username and password is correct.
+---
+parameters:
+  - in: body
+    name: credentials
+    description: The username and password of the user.
+    schema:
+        type: object
+        properties:
+            username:
+                type: string
+                description: Username
+                example: "username"
+                required: true
+            password:
+                type: string
+                description: Password
+                in: body
+                example: "password1234"
+                required: true
+responses:
+    200:
+        description: Successful operation. User's information will be returned.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 200
+                data:
+                    type: object
+                    properties:
+                        user_id:
+                            type: integer
+                            description: The id of the user
+                            example: 99
+                        username:
+                            type: string
+                            description: The username of the user
+                            example: "username"
+                        email:
+                            type: string
+                            description: The email address of the user
+                            example: "email@domain.com"
+
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: []
+    400:
+        description: Bad request. Validation on one or more required parameters failed.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 400
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: [
+                        "Incorrect password."
+                    ]
+    404:
+        description: User not found.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 404
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["User not found."]
+    5XX:
+        description: There was an unexpected error processing your request.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 5XX
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["Something went wrong."]

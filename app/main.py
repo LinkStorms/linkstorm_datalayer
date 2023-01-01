@@ -110,6 +110,39 @@ def create_user_endpoint():
     }, 200
 
 
+@app.route("/login", methods=["POST"])
+@swag_from("flasgger_docs/login_endpoint.yml")
+def login_endpoint():
+    username = request.json.get("username", "")
+    password = request.json.get("password", "")
+
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return {
+            "code": 404,
+            "data": {},
+            "errors": ["User not found."]
+        }, 404
+
+    # check if password is correct
+    if not bcrypt.checkpw(password.encode("utf-8"), user.password):
+        return {
+            "code": 400,
+            "data": {},
+            "errors": ["Incorrect password."]
+        }, 400
+
+    return {
+        "code": 200,
+        "data": {
+            "user_id": user.id,
+            "username": user.username,
+            "email": user.email
+        },
+        "errors": []
+    }, 200
+
+
 @app.route("/create_short_url", methods=["POST"])
 @swag_from("flasgger_docs/create_short_url_endpoint.yml")
 def create_short_url_endpoint():
