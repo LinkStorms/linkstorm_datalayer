@@ -143,6 +143,39 @@ def login_endpoint():
     }, 200
 
 
+@app.route("/get_user", methods=["GET"])
+@swag_from("flasgger_docs/get_user_endpoint.yml")
+def get_user_endpoint():
+    user_id = request.args.get("user_id", None)
+
+    try:
+        user_id_validation(user_id, check_if_exists=False)
+    except ValueError as e:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": [str(e)]
+        }, 400
+
+    user = User.query.filter_by(id=user_id).first()
+    if not user:
+        return {
+            "code": 404,
+            "data": {},
+            "errors": ["User not found."]
+        }, 404
+
+    return {
+        "code": 200,
+        "data": {
+            "user_id": user.id,
+            "username": user.username,
+            "email": user.email
+        },
+        "errors": []
+    }, 200
+
+
 @app.route("/create_short_url", methods=["POST"])
 @swag_from("flasgger_docs/create_short_url_endpoint.yml")
 def create_short_url_endpoint():
