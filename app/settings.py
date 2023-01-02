@@ -1,5 +1,7 @@
 # Description: This file contains the settings for the application.
 
+HOST="localhost"
+PORT="5000"
 
 PASSWORD_LENGTH_RANGE = (8, 512)
 USERNAME_LENGTH_RANGE = (3, 256)

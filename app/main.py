@@ -4,7 +4,11 @@ from sqlalchemy import exc
 from flasgger import Swagger, swag_from
 import bcrypt
 
-from settings import SHOW_TOKEN_IN_TOKEN_LIST
+from settings import (
+    SHOW_TOKEN_IN_TOKEN_LIST,
+    HOST,
+    PORT
+)
 from models import (
     db,
     User,
@@ -488,5 +492,5 @@ def delete_token_endpoint():
     }, 200
 
 if __name__ == '__main__':
-        app.run(host="localhost", port=5000, debug=True)
+        app.run(host=HOST, port=PORT, debug=True)
 
