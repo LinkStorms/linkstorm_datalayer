@@ -53,6 +53,10 @@ responses:
                             type: integer
                             description: The id of created short url
                             example: 99
+                        short_url:
+                            type: string
+                            description: The short url
+                            example: "https://link.com/short"
                 errors:
                     type: array
                     items:

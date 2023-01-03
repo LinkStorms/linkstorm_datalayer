@@ -236,7 +236,10 @@ def create_short_url_endpoint():
 
     return {
         "code": 200,
-        "data": {"short_url_id": short_url_obj.id},
+        "data": {
+            "short_url_id": short_url_obj.id,
+            "short_url": short_url_obj.short_url,
+        },
         "errors": []
     }, 200
 
