@@ -19,6 +19,12 @@ parameters:
                 in: body
                 example: "https://link.com/looooooooooooooooong"
                 required: true
+            service:
+                type: string
+                description: Service name.
+                in: body
+                example: "tinyurl"
+                required: true
             user_id:
                 type: integer
                 description: The user_id of the User who is the owner of the link.

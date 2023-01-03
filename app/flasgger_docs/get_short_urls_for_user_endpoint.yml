@@ -32,6 +32,10 @@ responses:
                                         type: string
                                         description: A valid url.
                                         example: "https://link.com/looooooooooooooooong"
+                                    service:
+                                        type: string
+                                        description: Service name.
+                                        example: "tinyurl"
                                     note:
                                         type: string
                                         description: An optional note to be saved with the short url.

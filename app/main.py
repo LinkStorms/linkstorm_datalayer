@@ -24,7 +24,8 @@ from validation import (
     token_validation,
     token_name_validation,
     token_id_validation,
-    short_url_id_validation
+    short_url_id_validation,
+    service_validation,
 )
 
 
@@ -37,7 +38,7 @@ Swagger(app)
 
 # Dropping all of the tables and creating them again.
 with app.app_context():
-    # db.drop_all()
+    db.drop_all()
     db.create_all()
 
 
@@ -185,10 +186,11 @@ def get_user_endpoint():
 def create_short_url_endpoint():
     short_url = request.json.get("short_url", "")
     long_url = request.json.get("long_url", "")
+    service = request.json.get("service", "")
     note = request.json.get("note", "")
     user_id = request.json.get("user_id", None)
 
-    short_url_obj = ShortUrl(short_url=short_url, long_url=long_url, note=note, user_id=user_id)
+    short_url_obj = ShortUrl(short_url=short_url, long_url=long_url, service=service, note=note, user_id=user_id)
 
     errors = []
     try:
@@ -201,6 +203,10 @@ def create_short_url_endpoint():
         errors.append(str(e))
     try:
         url_validation(short_url, url_name="short_url")
+    except ValueError as e:
+        errors.append(str(e))
+    try:
+        service_validation(service)
     except ValueError as e:
         errors.append(str(e))
     
@@ -309,6 +315,7 @@ def get_short_urls_for_user_endpoint():
                         "short_url_id": url.id,
                         "short_url": url.short_url,
                         "long_url": url.long_url,
+                        "service": url.service,
                         "note": url.note
                     } for url in short_url_list
                 ]

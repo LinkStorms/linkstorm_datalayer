@@ -18,6 +18,7 @@ class ShortUrl(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     short_url = db.Column(db.String, unique=True, nullable=False)
     long_url = db.Column(db.String, nullable=False)
+    service = db.Column(db.String, nullable=False)
     note = db.Column(db.String, nullable=True)
 
     def __repr__(self):

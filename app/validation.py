@@ -5,7 +5,8 @@ from settings import (
     PASSWORD_LENGTH_RANGE,
     USERNAME_LENGTH_RANGE,
     TOKEN_LENGTH_RANGE,
-    TOKEN_NAME_LENGTH_RANGE
+    TOKEN_NAME_LENGTH_RANGE,
+    SERVICE_LENGTH_RANGE,
 )
 from models import  User
 
@@ -131,3 +132,16 @@ def short_url_id_validation(short_url_id):
         short_url_id = int(short_url_id)
     except ValueError:
         raise ValueError("Short url id must be an integer.")
+
+
+def service_validation(service, service_length_range=SERVICE_LENGTH_RANGE):
+    """ Raises an exception if service is not valid.
+    """
+    if not service:
+        raise ValueError("Service is required.")
+    
+    min_length, max_length = service_length_range
+    if len(service) < min_length:
+        raise ValueError(f"Service must be at least {min_length} characters long.")
+    if len(service) > max_length:
+        raise ValueError(f"Service must be less than {max_length} characters long.")
