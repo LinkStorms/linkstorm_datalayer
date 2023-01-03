@@ -38,7 +38,7 @@ Swagger(app)
 
 # Dropping all of the tables and creating them again.
 with app.app_context():
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
 
 
