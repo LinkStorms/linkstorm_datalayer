@@ -1,0 +1,89 @@
+Return short url specified by short_url_id and user_id.
+---
+parameters:
+  - name: short_url_id
+    type: integer
+    description: id of the short url.
+    minimum: 1
+    in: query
+    required: true
+  - name: user_id
+    type: integer
+    description: Owner of the links.
+    minimum: 1
+    in: query
+    required: true
+responses:
+    200:
+        description: Short URL will be returned.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 200
+                data:
+                    type: object
+                    properties:
+                        short_url_id:
+                            type: integer
+                            description: The id of the short url.
+                            example: 1
+                        short_url:
+                            type: string
+                            description: A valid short url.
+                            example: "https://link.com/short"
+                        long_url:
+                            type: string
+                            description: A valid url.
+                            example: "https://link.com/looooooooooooooooong"
+                        service:
+                            type: string
+                            description: Service name.
+                            example: "tinyurl"
+                        note:
+                            type: string
+                            description: An optional note to be saved with the short url.
+                            example: Link to buy discounted shoes.
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: []
+    400:
+        description: Bad request. Validation on one or more required parameters failed.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 400
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: [
+                        "User does not exist."
+                    ]
+    5XX:
+        description: There was an unexpected error processing your request.
+        schema:
+            properties:
+                code:
+                    type: integer
+                    description: The status code
+                    example: 5XX
+                data:
+                    type: object
+                    example: {}
+                errors:
+                    type: array
+                    items:
+                        type: string
+                    description: The errors
+                    example: ["Something went wrong."]

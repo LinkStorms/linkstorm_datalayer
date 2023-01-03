@@ -325,6 +325,52 @@ def get_short_urls_for_user_endpoint():
     return data, 200
 
 
+@app.route("/get_short_url", methods=["GET"])
+@swag_from("flasgger_docs/get_short_url_endpoint.yml")
+def get_short_url_endpoint():
+    short_url_id = request.args.get("short_url_id", None)
+    user_id = request.args.get("user_id", None)
+
+    errors = []
+    # if there are any validation errors, return them
+    try:
+        short_url_id_validation(short_url_id)
+    except ValueError as e:
+        errors.append(str(e))
+    try:
+        user_id_validation(user_id)
+    except ValueError as e:
+        errors.append(str(e))
+    
+    if errors:
+        return {
+            "code": 400,
+            "data": {},
+            "errors": errors
+        }, 400
+
+    short_url_obj = ShortUrl.query.filter_by(id=short_url_id, user_id=user_id).first()
+    if not short_url_obj:
+        return {
+            "code": 404,
+            "data": {},
+            "errors": ["Short url not found."]
+        }, 404
+
+    data = {
+        "code": 200,
+        "data": {
+            "short_url_id": short_url_obj.id,
+            "short_url": short_url_obj.short_url,
+            "long_url": short_url_obj.long_url,
+            "service": short_url_obj.service,
+            "note": short_url_obj.note
+        },
+        "errors": []
+    }
+    return data, 200
+
+
 @app.route("/create_token", methods=["POST"])
 @swag_from("flasgger_docs/create_token_endpoint.yml")
 def create_token_endpoint():
