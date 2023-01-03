@@ -1,9 +1,15 @@
-Return the token specified by the token_id.
+Return the token specified by the token_id and user_id.
 ---
 parameters:
   - name: token_id
     type: integer
     description: id of the token.
+    minimum: 1
+    in: query
+    required: true
+  - name: user_id
+    type: integer
+    description: id of the user.
     minimum: 1
     in: query
     required: true

@@ -409,18 +409,26 @@ def get_tokens_for_user_endpoint():
 @swag_from("flasgger_docs/get_token_by_id_endpoint.yml")
 def get_token_by_id_endpoint():
     token_id = request.args.get("token_id", None)
+    user_id = request.args.get("user_id", None)
 
     # if there are any validation errors, return them
+    errors = []
     try:
         token_id_validation(token_id)
     except ValueError as e:
+        errors.append(str(e))
+    try:
+        user_id_validation(user_id)
+    except ValueError as e:
+        errors.append(str(e))
+    if errors:
         return {
             "code": 400,
             "data": {},
-            "errors": [str(e)]
+            "errors": errors
         }, 400
 
-    token = Token.query.filter_by(id=token_id).first()
+    token = Token.query.filter_by(id=token_id, user_id=user_id).first()
     if not token:
         return {
             "code": 404,
@@ -493,4 +501,3 @@ def delete_token_endpoint():
 
 if __name__ == '__main__':
         app.run(host=HOST, port=PORT, debug=True)
-
