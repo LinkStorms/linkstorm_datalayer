@@ -14,7 +14,7 @@ parameters:
                 description: Token
                 example: "p2ZbmRosn7Klkbr5ir7c1deQmztlViOipj2q81GB2XcUv9suOG8yp3OspA1b"
                 required: true
-            name:
+            token_name:
                 type: string
                 description: Name of the token
                 in: body
