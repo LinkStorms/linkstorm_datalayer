@@ -198,17 +198,21 @@ def create_short_url_endpoint():
     except ValueError as e:
         errors.append(str(e))
     try:
+        service_validation(service)
+    except ValueError as e:
+        errors.append(str(e))
+    try:
         url_validation(long_url, url_name="long_url")
     except ValueError as e:
         errors.append(str(e))
     try:
-        url_validation(short_url, url_name="short_url")
+        if service == "rebrandly":
+            url_validation(short_url, url_name="short_url", ignore_protocol=True)
+        else:
+            url_validation(short_url, url_name="short_url")
     except ValueError as e:
         errors.append(str(e))
-    try:
-        service_validation(service)
-    except ValueError as e:
-        errors.append(str(e))
+
     
     # if there are any validation errors, return them
     if errors:
