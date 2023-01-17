@@ -1,5 +1,7 @@
 Delete the short url specified by the short_url_id.
 ---
+tags:
+  - URL
 parameters:
   - name: short_url_id
     type: integer

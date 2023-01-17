@@ -1,5 +1,7 @@
 Returning the user if username and password is correct.
 ---
+tags:
+  - User
 parameters:
   - in: body
     name: credentials

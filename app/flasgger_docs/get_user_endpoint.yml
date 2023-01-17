@@ -1,5 +1,7 @@
 Returning the user by user_id if user_id is correct.
 ---
+tags:
+  - User
 parameters:
   - name: user_id
     type: integer

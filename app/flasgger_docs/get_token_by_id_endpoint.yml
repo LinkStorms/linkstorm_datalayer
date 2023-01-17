@@ -1,5 +1,7 @@
 Return the token specified by the token_id and user_id.
 ---
+tags:
+  - Token
 parameters:
   - name: token_id
     type: integer

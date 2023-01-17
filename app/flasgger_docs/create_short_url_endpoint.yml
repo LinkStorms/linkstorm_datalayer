@@ -1,5 +1,7 @@
 Creating a short url and returning the short url id if the creation was successful.
 ---
+tags:
+  - URL
 parameters:
   - in: body
     name: short_url

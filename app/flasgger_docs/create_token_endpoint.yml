@@ -1,6 +1,8 @@
 Creating a new token for a user and returning the token id if the creation was
 successful.
 ---
+tags:
+  - Token
 parameters:
   - in: body
     name: token

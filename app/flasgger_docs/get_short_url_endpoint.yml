@@ -1,5 +1,7 @@
 Return short url specified by short_url_id and user_id.
 ---
+tags:
+  - URL
 parameters:
   - name: short_url_id
     type: integer

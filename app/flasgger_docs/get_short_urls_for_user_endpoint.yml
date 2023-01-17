@@ -1,5 +1,7 @@
 Return list of short urls of a certain user.
 ---
+tags:
+  - URL
 parameters:
   - name: user_id
     type: integer

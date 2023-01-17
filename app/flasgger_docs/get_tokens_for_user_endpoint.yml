@@ -1,5 +1,7 @@
 Return list of tokens of a certain user.
 ---
+tags:
+  - Token
 parameters:
   - name: user_id
     type: integer
