@@ -28,12 +28,18 @@ from validation import (
     service_validation,
 )
 
+template = {
+    "info":{
+        "title": "LinkStorm Data Layer",
+        "description": "Storing URLs, users and tokens."
+    }
+}
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
 
-Swagger(app)
+Swagger(app, template=template)
 
 
 # Dropping all of the tables and creating them again.
